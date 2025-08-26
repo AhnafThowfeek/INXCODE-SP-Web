@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Mail, Phone, MapPin, Github, Linkedin, CheckCircle, Code, Palette, Smartphone, Globe, Database, Users } from 'lucide-react';
+import { Menu, X, ChevronDown, Mail, Phone, MapPin, Github, Linkedin, CheckCircle, Code, Palette, Smartphone, Globe, Database, Users, Sun, Moon } from 'lucide-react';
+import { useTheme } from './ThemeContext.jsx';
 import financialDashboard from './assets/images/financial-dashboard.png';
 import lms from './assets/images/lms.webp';
 import health from './assets/images/health.jpg';
@@ -87,6 +88,7 @@ const portfolioData = [
 ];
 
 const App = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -163,54 +165,87 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
     
-      <header className="fixed top-0 w-full bg-white shadow-lg z-50">
+      <header className="fixed top-0 w-full bg-white dark:bg-gray-800 shadow-lg z-50 transition-colors duration-300">
         <nav className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <div className="flex items-center">
-                <span className="text-2xl font-bold text-gray-800">
-                  <span className="text-blue-600">∞</span>inxcode
+                <span className="text-2xl font-bold text-gray-800 dark:text-white">
+                  <span className="text-blue-600 dark:text-blue-400">∞</span>inxcode
                 </span>
               </div>
             </div>
 
-         
-            <div className="hidden md:flex space-x-8">
+            
+            <div className="hidden md:flex items-center space-x-8">
               {['home', 'about', 'services', 'portfolio', 'contact'].map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
-                  className={`capitalize font-medium transition-colors hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1 ${
-                    activeSection === item ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700'
+                  className={`capitalize font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1 ${
+                    activeSection === item 
+                      ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400' 
+                      : 'text-gray-700 dark:text-gray-300'
                   }`}
                   aria-label={`Navigate to ${item} section`}
                 >
                   {item}
                 </button>
               ))}
+              
+              
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? (
+                  <Sun className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-600" />
+                )}
+              </button>
             </div>
 
-           
-            <button
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle mobile menu"
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            <div className="md:hidden flex items-center space-x-2">
+              
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? (
+                  <Sun className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                )}
+              </button>
+              
+              <button
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle mobile menu"
+              >
+                {isMenuOpen ? (
+                  <X className="w-6 h-6 text-gray-800 dark:text-white" />
+                ) : (
+                  <Menu className="w-6 h-6 text-gray-800 dark:text-white" />
+                )}
+              </button>
+            </div>
           </div>
 
-          
+         
           {isMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-gray-200">
+            <div className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-600">
               <div className="flex flex-col space-y-2 pt-4">
                 {['home', 'about', 'services', 'portfolio', 'contact'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
-                    className="capitalize text-left py-2 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="capitalize text-left py-2 px-4 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
                     aria-label={`Navigate to ${item} section`}
                   >
                     {item}
@@ -222,15 +257,14 @@ const App = () => {
         </nav>
       </header>
 
-
-      <section id="home" className="pt-20 min-h-screen flex items-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <section id="home" className="pt-20 min-h-screen flex items-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="container mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
               Building Tomorrow's
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Digital Solutions</span>
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"> Digital Solutions</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
               We transform ideas into powerful digital experiences through innovative web development, stunning design, and cutting-edge technology solutions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -242,7 +276,7 @@ const App = () => {
               </button>
               <button
                 onClick={() => scrollToSection('contact')}
-                className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold hover:border-blue-600 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-full text-lg font-semibold hover:border-blue-600 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 Get In Touch
               </button>
@@ -251,45 +285,44 @@ const App = () => {
         </div>
       </section>
 
-  
-      <section id="about" className="py-20 bg-white">
+      <section id="about" className="py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">About INXCODE</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">About INXCODE</h2>
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
                 Founded with a vision to bridge the gap between innovative ideas and exceptional digital solutions, 
                 INXCODE has been at the forefront of web development and digital transformation for businesses worldwide.
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 mt-16">
-              <div className="text-center p-6 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors">
-                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="text-center p-6 rounded-xl bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                <div className="w-16 h-16 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Innovation First</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Innovation First</h3>
+                <p className="text-gray-600 dark:text-gray-300">
                   We embrace cutting-edge technologies and methodologies to deliver solutions that stay ahead of the curve.
                 </p>
               </div>
 
-              <div className="text-center p-6 rounded-xl bg-purple-50 hover:bg-purple-100 transition-colors">
-                <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="text-center p-6 rounded-xl bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+                <div className="w-16 h-16 bg-purple-600 dark:bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Client-Centric</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Client-Centric</h3>
+                <p className="text-gray-600 dark:text-gray-300">
                   Every project is tailored to meet our clients' unique needs, ensuring maximum value and satisfaction.
                 </p>
               </div>
 
-              <div className="text-center p-6 rounded-xl bg-green-50 hover:bg-green-100 transition-colors">
-                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="text-center p-6 rounded-xl bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
+                <div className="w-16 h-16 bg-green-600 dark:bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Globe className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Global Impact</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Global Impact</h3>
+                <p className="text-gray-600 dark:text-gray-300">
                   We build scalable solutions that make a positive impact on businesses and communities worldwide.
                 </p>
               </div>
@@ -298,12 +331,12 @@ const App = () => {
         </div>
       </section>
 
-     
-      <section id="services" className="py-20 bg-gray-50">
+      
+      <section id="services" className="py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Services</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Our Services</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Comprehensive digital solutions designed to elevate your business and drive growth in the digital age.
             </p>
           </div>
@@ -312,25 +345,25 @@ const App = () => {
             {servicesData.map((service) => (
               <div
                 key={service.id}
-                className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
+                className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 dark:border-gray-700"
               >
-                <div className="text-blue-600 mb-4">
+                <div className="text-blue-600 dark:text-blue-400 mb-4">
                   {service.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{service.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{service.description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{service.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{service.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-   
-      <section id="portfolio" className="py-20 bg-white">
+    
+      <section id="portfolio" className="py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Portfolio</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Our Portfolio</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Showcasing our latest projects and the innovative solutions we've delivered for our clients.
             </p>
           </div>
@@ -339,7 +372,7 @@ const App = () => {
             {portfolioData.map((project) => (
               <div
                 key={project.id}
-                className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="group bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -350,12 +383,12 @@ const App = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{project.title}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{project.title}</h3>
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag, index) => (
                       <span
                         key={index}
-                        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+                        className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium"
                       >
                         {tag}
                       </span>
@@ -368,65 +401,65 @@ const App = () => {
         </div>
       </section>
 
-    
-      <section id="contact" className="py-20 bg-gray-50">
+      
+      <section id="contact" className="py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Get In Touch</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Get In Touch</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Ready to start your next project? Let's discuss how we can help bring your vision to life.
             </p>
           </div>
 
           <div className="max-w-4xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12">
-              {/* Contact Info */}
+           
               <div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-6">Let's Connect</h3>
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Let's Connect</h3>
                 <div className="space-y-4 mb-8">
                   <div className="flex items-center space-x-3">
-                    <Mail className="w-5 h-5 text-blue-600" />
-                    <span className="text-gray-700">inxcode@gmail.com</span>
+                    <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <span className="text-gray-700 dark:text-gray-300">inxcode@gmail.com</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Phone className="w-5 h-5 text-blue-600" />
-                    <span className="text-gray-700">+94 12 345 6789</span>
+                    <Phone className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <span className="text-gray-700 dark:text-gray-300">+94 12 345 6789</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <MapPin className="w-5 h-5 text-blue-600" />
-                    <span className="text-gray-700">Batticaloa, Eastern, Sri Lanka</span>
+                    <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <span className="text-gray-700 dark:text-gray-300">Batticaloa, Eastern, Sri Lanka</span>
                   </div>
                 </div>
 
                 <div className="flex space-x-4">
                   <a
                     href="#"
-                    className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     aria-label="LinkedIn"
                   >
                     <Linkedin className="w-5 h-5" />
                   </a>
                   <a
                     href="#"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-white hover:bg-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    className="w-10 h-10 bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full flex items-center justify-center text-white transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     aria-label="GitHub"
                   >
                     <Github className="w-5 h-5" />
                   </a>
-                 
                 </div>
               </div>
 
+              
               <div>
                 {isSubmitted && (
-                  <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                  <div className="mb-6 p-4 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-400 rounded-lg">
                     Thank you! Your message has been sent successfully.
                   </div>
                 )}
 
-                <div className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Full Name *
                     </label>
                     <input
@@ -435,21 +468,21 @@ const App = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                        formErrors.name ? 'border-red-500' : 'border-gray-300'
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+                        formErrors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                       }`}
                       placeholder="Enter your full name"
                       aria-describedby={formErrors.name ? 'name-error' : undefined}
                     />
                     {formErrors.name && (
-                      <p id="name-error" className="mt-1 text-sm text-red-600">
+                      <p id="name-error" className="mt-1 text-sm text-red-600 dark:text-red-400">
                         {formErrors.name}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Email Address *
                     </label>
                     <input
@@ -458,21 +491,21 @@ const App = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-                        formErrors.email ? 'border-red-500' : 'border-gray-300'
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+                        formErrors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                       }`}
                       placeholder="Enter your email address"
                       aria-describedby={formErrors.email ? 'email-error' : undefined}
                     />
                     {formErrors.email && (
-                      <p id="email-error" className="mt-1 text-sm text-red-600">
+                      <p id="email-error" className="mt-1 text-sm text-red-600 dark:text-red-400">
                         {formErrors.email}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Message *
                     </label>
                     <textarea
@@ -481,14 +514,14 @@ const App = () => {
                       value={formData.message}
                       onChange={handleInputChange}
                       rows={5}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-vertical ${
-                        formErrors.message ? 'border-red-500' : 'border-gray-300'
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-vertical bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+                        formErrors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                       }`}
                       placeholder="Tell us about your project..."
                       aria-describedby={formErrors.message ? 'message-error' : undefined}
                     ></textarea>
                     {formErrors.message && (
-                      <p id="message-error" className="mt-1 text-sm text-red-600">
+                      <p id="message-error" className="mt-1 text-sm text-red-600 dark:text-red-400">
                         {formErrors.message}
                       </p>
                     )}
@@ -500,15 +533,15 @@ const App = () => {
                   >
                     Send Message
                   </button>
-                </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-     
-      <footer className="bg-gray-900 text-white py-12">
+
+      <footer className="bg-gray-900 dark:bg-black text-white py-12 transition-colors duration-300">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-6">
@@ -516,7 +549,7 @@ const App = () => {
                 <span className="text-blue-400">∞</span>inxcode
               </span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+            <p className="text-gray-400 dark:text-gray-500 mb-6 max-w-2xl mx-auto">
               Transforming ideas into exceptional digital experiences through innovative development and design solutions.
             </p>
             <div className="flex justify-center space-x-6 mb-8">
@@ -534,10 +567,9 @@ const App = () => {
               >
                 <Github className="w-6 h-6" />
               </a>
-              
             </div>
-            <div className="border-t border-gray-800 pt-8">
-              <p className="text-gray-400">
+            <div className="border-t border-gray-800 dark:border-gray-700 pt-8">
+              <p className="text-gray-400 dark:text-gray-500">
                 © 2025 INXCODE Pvt Ltd. All rights reserved.
               </p>
             </div>
