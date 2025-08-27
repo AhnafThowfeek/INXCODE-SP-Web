@@ -13,14 +13,18 @@ export const useTheme = () => {
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Check for saved theme preference or default to light mode
+  // Check for saved theme preference or default to system preference
   useEffect(() => {
-    // Since we can't use localStorage in Claude artifacts, we'll use a different approach
-    // Check system preference
+    // Check localStorage first
+    const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setIsDarkMode(prefersDark);
     
-    if (prefersDark) {
+    // Use saved theme if available, otherwise use system preference
+    const shouldUseDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    setIsDarkMode(shouldUseDark);
+    
+    if (shouldUseDark) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
@@ -33,8 +37,10 @@ export const ThemeProvider = ({ children }) => {
     
     if (newTheme) {
       document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
     }
   };
 
